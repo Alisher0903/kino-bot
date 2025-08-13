@@ -8,6 +8,7 @@ export const bot = new Telegraf(BOT_TOKEN);
 
 export const MOVIE_CODES: Record<string | number, string | number> = {
   1: 13,
+  2: 14,
 };
 
 export const REQUIRED_CHANNELS = [

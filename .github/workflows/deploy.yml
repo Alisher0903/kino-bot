@@ -39,6 +39,6 @@ jobs:
             npm run build
 
             echo "🚀 PM2 restart..."
-            pm2 delete all || true
+            pm2 delete sfera-src || true
             pm2 start dist/index.js --name sfera-src
           EOF
