@@ -1,0 +1,44 @@
+name: Deploy Sfera bot
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: SSH kalitini tayyorlash
+        run: |
+          echo "${{ secrets.SERVER_SSH_KEY }}" > private_key
+          chmod 600 private_key
+
+      - name: known_hosts ga serverni qo‘shish
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Serverda loyihani yangilash va PM2 bilan qayta ishga tushirish
+        run: |
+          ssh -i private_key -o StrictHostKeyChecking=no root@${{ secrets.SERVER_HOST }} << 'EOF'
+            set -e
+            cd /srv/sfera-bot/src
+
+            echo "👉 Git pull..."
+            git pull origin main
+
+            echo "🧹 Eski fayllarni tozalayapman..."
+            rm -rf node_modules/ package-lock.json
+
+            echo "📦 Dependenciyalarni qayta o'rnatayapman..."
+            npm install --force
+
+            echo "🔨 Build qilayapman..."
+            npm run build
+
+            echo "🚀 PM2 restart..."
+            pm2 delete all || true
+            pm2 start dist/index.js --name sfera-src
+          EOF
