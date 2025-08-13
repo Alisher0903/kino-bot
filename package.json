@@ -1,0 +1,23 @@
+{
+  "name": "kino-bot",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "scripts": {
+    "dev": "nodemon --exec ts-node index.ts",
+    "build": "tsc",
+    "start": "nodemon dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "nodemon": "^3.1.10",
+    "telegraf": "^4.16.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.2.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  }
+}
